@@ -58,30 +58,17 @@ const blogs = [
   },
 ]
 const mostBlogs = (blogs) => {
-  let authors = {}
-  blogs.forEach((blog) => {
-    const author = blog.author
-    if (authors[author]) {
-      authors[author]++
-    } else {
-      authors[author] = 1
-    }
-  })
-  let mostAuthor
-  Object.entries(authors).forEach(([author, blogs]) => {
-    console.log(author, blogs)
-    if (!mostAuthor || blogs > mostAuthor.blogs) {
-      mostAuthor = {
-        author,
-        blogs,
-      }
-    }
-  })
-  return mostAuthor
+  const authors = _.countBy(blogs, (blog) => blog.author)
+  const topAuthor = _.maxBy(Object.entries(authors), ([, blogs]) => blogs)
+  return {
+    author: topAuthor[0],
+    blogs: topAuthor[1],
+  }
 }
 
 const mostLikes = (blogs) => {
   console.assert(false, 'NotImplemented')
+
 }
 console.log(mostLikes(blogs))
 
