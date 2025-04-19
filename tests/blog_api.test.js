@@ -26,9 +26,28 @@ test('blogs are returned successfully', async () => {
 test('unique id in named id not _id', async () => {
   const response = await api.get('/api/blogs')
   const content = response.body
-  assert.strictEqual(content.every(blog => 'id' in blog &&  !('_id' in blog) ), true)
+  assert.strictEqual(
+    content.every((blog) => 'id' in blog && !('_id' in blog)),
+    true
+  )
 })
 
+test('a blog can be added', async () => {
+  const newBlog = {
+    title: 'TEST',
+    author: 'The Tester',
+    url: 'Testing ...',
+    likes: 69420,
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  const response = await api.get('/api/blogs')
+  const blogsAfter = response.body
+  assert.strictEqual(blogsAfter.length, helper.initialBlogs.length + 1)
+})
 after(async () => {
   await mongoose.connection.close()
 })
