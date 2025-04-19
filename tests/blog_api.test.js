@@ -64,6 +64,20 @@ test('likes field will default to zero if missing', async () => {
   assert.strictEqual(response.body.likes, 0)
 })
 
+test('try to submit Note with no title or URL', async () => {
+  let newBlog = {
+    author: 'random tester',
+    url: 'example.com',
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+
+  newBlog = {
+    title: 'testing with no likes',
+    author: 'random tester',
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
