@@ -54,7 +54,7 @@ The base URL is `http://localhost:3001`
 
 | Method   | Endpoint     | Description             | Success Response          | Error Response                     |
 | :------- | :----------- | :---------------------- | :------------------------ | :--------------------------------- |
-| `GET`    | `/posts`     | Get all blog posts      | `200 OK` - Array of posts | `500 Internal Server Error`        |
-| `POST`   | `/posts`     | Create a new blog post  | `201 Created` - New post  | `400 Bad Request`                  |
-| `PUT`    | `/posts/:id` | Update an existing post | `200 OK` - Updated post   | `404 Not Found`, `400 Bad Request` |
-| `DELETE` | `/posts/:id` | Delete a post by ID     | `204 No Content`          | `404 Not Found`                    |
+| `GET`    | `/api/blogs`     | Get all blog posts      | `200 OK` - Array of posts | `500 Internal Server Error`        |
+| `POST`   | `/api/blogs`     | Create a new blog post  | `201 Created` - New post  | `400 Bad Request`                  |
+| `PUT`    | `/api/blogs/:id` | Update an existing post | `200 OK` - Updated post   | `404 Not Found`, `400 Bad Request` |
+| `DELETE` | `/api/blogs/:id` | Delete a post by ID     | `204 No Content`          | `404 Not Found`                    |
