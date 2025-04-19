@@ -23,6 +23,11 @@ test('blogs are returned successfully', async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
+test('unique id in named id not _id', async () => {
+  const response = await api.get('/api/blogs')
+  const content = response.body
+  assert.strictEqual(content.every(blog => 'id' in blog &&  !('_id' in blog) ), true)
+})
 
 after(async () => {
   await mongoose.connection.close()
