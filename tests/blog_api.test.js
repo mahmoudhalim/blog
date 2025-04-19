@@ -78,7 +78,7 @@ test('try to submit Note with no title or URL', async () => {
   await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
-test('delete a blog', async () => {
+test('blog can be deleted', async () => {
   const newBlog = {
     title: 'testing with no likes',
     author: 'random tester',
@@ -88,7 +88,26 @@ test('delete a blog', async () => {
   const deletedBlogId = response.body.id
   await api.delete(`/api/blogs/${deletedBlogId}`).expect(204)
   const blogs = (await api.get('/api/blogs').expect(200)).body
-  assert.strictEqual(blogs.every(blog => blog.id !== deletedBlogId), true)
+  assert.strictEqual(
+    blogs.every((blog) => blog.id !== deletedBlogId),
+    true
+  )
+})
+
+test('a blog can be updated', async () => {
+  const newBlog = {
+    title: 'testing with no likes',
+    author: 'random tester',
+    url: 'example.com',
+  }
+  let response = await api.post('/api/blogs').send(newBlog).expect(201)
+  const updatedBlogId = response.body.id
+  const updatedBlog = {
+    likes: 69420,
+  }
+  response = await api.put(`/api/blogs/${updatedBlogId}`).send(updatedBlog).expect(200)
+
+  assert.strictEqual(response.body.likes, updatedBlog.likes)
 })
 
 after(async () => {
