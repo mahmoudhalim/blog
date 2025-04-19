@@ -41,10 +41,10 @@ A JSON API server built with Node.js and Express.js to manage blog post data.
 ## Running the Server
 
 1.  **Start the server:**
-    `bash
+
+    ```bash
     npm start
-    `
-    =
+    ```
 
 2.  The server will typically start on `http://localhost:3001`
 
