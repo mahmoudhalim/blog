@@ -78,6 +78,19 @@ test('try to submit Note with no title or URL', async () => {
   await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
+test('delete a blog', async () => {
+  const newBlog = {
+    title: 'testing with no likes',
+    author: 'random tester',
+    url: 'example.com',
+  }
+  const response = await api.post('/api/blogs').send(newBlog).expect(201)
+  const deletedBlogId = response.body.id
+  await api.delete(`/api/blogs/${deletedBlogId}`).expect(204)
+  const blogs = (await api.get('/api/blogs').expect(200)).body
+  assert.strictEqual(blogs.every(blog => blog.id !== deletedBlogId), true)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

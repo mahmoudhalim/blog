@@ -1,6 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const { error } = require('../utils/logger')
 
 blogsRouter.get('/', (request, response, next) => {
   Blog.find({})
@@ -13,12 +12,11 @@ blogsRouter.get('/', (request, response, next) => {
 blogsRouter.post('/', (request, response, next) => {
   if (!request.body.likes) request.body.likes = 0
   if (!request.body.url) {
-    error("URL can't be empty")
-    return response.status(400).end()
+    return response.status(400).send({ error: 'URL cannot be empty' }).end()
   }
   if (!request.body.title) {
-    error("title can't be empty")
-    return response.status(400).end()}
+    return response.status(400).send({ error: 'title cannot be empty' }).end()
+  }
   const blog = new Blog(request.body)
 
   console.log(blog)
@@ -28,6 +26,11 @@ blogsRouter.post('/', (request, response, next) => {
       response.status(201).json(result)
     })
     .catch((error) => next(error))
+})
+
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndDelete(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = blogsRouter
