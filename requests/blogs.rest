@@ -1,0 +1,21 @@
+GET http://localhost:3001/api/blogs
+###
+DELETE http://localhost:3001/api/blogs/68038512accc501634af6509
+### 
+POST  http://localhost:3001/api/blogs/
+Content-Type: application/json
+
+{
+    "title":"TEST",
+    "author": "The Tester",
+    "url": "Testing ...",
+    "likes": 69420
+
+}
+###
+PUT http://localhost:3001/api/blogs/680358102978e889a8e5020b 
+Content-Type: application/json
+
+{
+"title":"updateTEST", "author": "The Tester", "url": "Testing ...", "likes": 6969
+}
