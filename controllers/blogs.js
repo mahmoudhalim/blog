@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', {
@@ -18,7 +19,11 @@ blogsRouter.post('/', async (request, response) => {
   if (!request.body.title) {
     return response.status(400).send({ error: 'title cannot be empty' }).end()
   }
-  const user = await User.findOne({})
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
 
   const blog = new Blog({
     user: user.id,
@@ -32,6 +37,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
+
 blogsRouter.put('/:id', async (request, response) => {
   const { title, author, url, likes } = request.body
   const blog = await Blog.findById(request.params.id)
@@ -46,4 +52,5 @@ blogsRouter.put('/:id', async (request, response) => {
   const updatedPost = await blog.save()
   response.json(updatedPost)
 })
+
 module.exports = blogsRouter

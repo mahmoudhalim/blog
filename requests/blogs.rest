@@ -4,6 +4,7 @@ DELETE http://localhost:3001/api/blogs/68038512accc501634af6509
 ### 
 POST  http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY4MDYyOTE3NWRiMTI2NDk4MjNmYzgwOSIsImlhdCI6MTc0NjEzNjQ1NX0.BWHzQVh3YQKNIa7d3Gb7MEx4k6cvstQmoBE2Y1pSw3g
 
 {
     "title":"TEST",
