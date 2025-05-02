@@ -7,6 +7,8 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const api = supertest(app)
 
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY4MDYyOTE3NWRiMTI2NDk4MjNmYzgwOSIsImlhdCI6MTc0NjE3NDQxM30.BPJsQiecek6ETW2xutFRns62RlqCcyhwR5Et2-T-bgw'
 beforeEach(async () => {
   await Blog.deleteMany({})
   const blogsObject = helper.initialBlogs.map((blog) => new Blog(blog))
@@ -41,6 +43,7 @@ test('a blog can be added', async () => {
   }
   await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -57,6 +60,7 @@ test('likes field will default to zero if missing', async () => {
   }
   const response = await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -84,9 +88,16 @@ test('blog can be deleted', async () => {
     author: 'random tester',
     url: 'example.com',
   }
-  const response = await api.post('/api/blogs').send(newBlog).expect(201)
+  const response = await api
+    .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
+    .send(newBlog)
+    .expect(201)
   const deletedBlogId = response.body.id
-  await api.delete(`/api/blogs/${deletedBlogId}`).expect(204)
+  await api
+    .delete(`/api/blogs/${deletedBlogId}`)
+    .set({ Authorization: `Bearer ${token}` })
+    .expect(204)
   const blogs = (await api.get('/api/blogs').expect(200)).body
   assert.strictEqual(
     blogs.every((blog) => blog.id !== deletedBlogId),
@@ -100,12 +111,20 @@ test('a blog can be updated', async () => {
     author: 'random tester',
     url: 'example.com',
   }
-  let response = await api.post('/api/blogs').send(newBlog).expect(201)
+  let response = await api
+    .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
+    .send(newBlog)
+    .expect(201)
   const updatedBlogId = response.body.id
   const updatedBlog = {
     likes: 69420,
   }
-  response = await api.put(`/api/blogs/${updatedBlogId}`).send(updatedBlog).expect(200)
+  response = await api
+    .put(`/api/blogs/${updatedBlogId}`)
+    .set({ Authorization: `Bearer ${token}` })
+    .send(updatedBlog)
+    .expect(200)
 
   assert.strictEqual(response.body.likes, updatedBlog.likes)
 })
