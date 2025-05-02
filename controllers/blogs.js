@@ -17,7 +17,7 @@ blogsRouter.post('/', async (request, response) => {
   if (!request.body.title) {
     return response.status(400).send({ error: 'title cannot be empty' }).end()
   }
-  if (!request.user.id) {
+  if (!request.user || !request.user.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
 
