@@ -52,6 +52,23 @@ test('a blog can be added', async () => {
   assert.strictEqual(blogsAfter.length, helper.initialBlogs.length + 1)
 })
 
+
+test('a blog can not be added without user token', async () => {
+  const newBlog = {
+    title: 'TEST',
+    author: 'The Tester',
+    url: 'Testing ...',
+    likes: 69420,
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+  const response = await api.get('/api/blogs')
+  const blogsAfter = response.body
+  assert.strictEqual(blogsAfter.length, helper.initialBlogs.length)
+})
+
 test('likes field will default to zero if missing', async () => {
   const newBlog = {
     title: 'testing with no likes',
